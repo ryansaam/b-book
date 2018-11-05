@@ -1,21 +1,44 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react'
+import { View, Button } from 'react-native'
+import { createStackNavigator } from 'react-navigation'
 
-export default class App extends React.Component {
+import DefaultScreen from './components/DefaultScreen.js'
+import HomeScreen from './components/HomeScreen.js'
+import SignUpScreen from './components/SignUpScreen.js'
+
+const RootStack = createStackNavigator({
+  Default: DefaultScreen,
+  SignUp: SignUpScreen,
+  Home: HomeScreen
+}, {
+  initialRouteName: 'Default',
+  navigationOptions: {
+    headerStyle: {
+      backgroundColor: '#f4511e',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  }
+})
+
+class App extends Component {
+  constructor() {
+    super()
+    this.state = {
+      isLoggedIn: true
+    }
+    this.logIn = this.logIn.bind(this)
+  }
+  logIn() {
+    this.setState(state => ({
+      isLoggedIn: !state.isLoggedIn
+    }))
+  }
   render() {
-    return (
-      <View style={styles.container}>
-        <Text>Hello world</Text>
-      </View>
-    );
+    return this.state.isLoggedIn ? <RootStack screenProps={this.logIn} /> : <HomeScreen />
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App
