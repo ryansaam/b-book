@@ -15,6 +15,7 @@ const InputField = props => {
         secureTextEntry={props.secureTextEntry}
         keyboardType={props.keyboardType}
         returnKeyType={props.returnKeyType}
+        onSubmitEditing={props.handleSubmit}
       />
     </View>
   )
