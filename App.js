@@ -51,26 +51,22 @@ class App extends Component {
   constructor() {
     super()
     this.state = {
-      isLoggedIn: true,
-      username: ''
+      isLoggedIn: true
     }
     this.logIn = this.logIn.bind(this)
-    this.setUsername = this.setUsername.bind(this)
   }
+
   logIn() {
     this.setState(state => ({
       isLoggedIn: !state.isLoggedIn
     }))
   }
-  setUsername(username) {
-    this.setState({ username })
-    console.log(username)
-  }
+
   render() {
     return (
       this.state.isLoggedIn ? 
       <Provider store={store} >
-        <RootStack screenProps={{ logIn: this.logIn, username: this.setUsername }} />
+        <RootStack screenProps={{ logIn: this.logIn }} />
       </Provider> : <HomeScreen />
     )
   }
