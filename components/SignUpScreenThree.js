@@ -3,12 +3,14 @@ import { View, Text, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } 
 
 import InputField from "./InputField.js"
 import FormButton from "./FormButton.js"
+import ErrorMessage from "./ErrorMessage.js"
 
 class SignUpScreenThree extends Component {
   constructor(props) {
     super(props)
     this.state = {
       bool: false,
+      displayError: false,
       valueOne: "",
       valueTwo: ""
     }
@@ -21,8 +23,8 @@ class SignUpScreenThree extends Component {
     const { valueOne, valueTwo } = this.state
     if (valueOne.length !== prevState.valueOne.length || valueTwo.length !== prevState.valueTwo.length) {
       if (valueOne.length === 0 || valueTwo.length === 0) {
-        this.setState({ bool: false })
-      } else if (valueOne.length > 0 & valueTwo.length > 0 ) {
+        this.setState({ bool: false, displayError: false })
+      } else if (valueOne.length > 0 & valueTwo.length > 0) {
         this.setState({ bool: true })
       }
     }
@@ -39,13 +41,15 @@ class SignUpScreenThree extends Component {
 
   onSubmit() {
     const { valueOne, valueTwo } = this.state
-    if (valueOne.length > 0 & valueTwo.length > 0 ) {
+    if (this.state.valueOne !== this.state.valueTwo) {
+      this.setState({ displayError: true })
+    } else if (valueOne.length > 0 & valueTwo.length > 0 && valueOne === valueTwo) {
       this.props.screenProps.logIn()
     }
   }
 
   render() {
-    const { bool } = this.state
+    const { bool, displayError } = this.state
     return (
       <KeyboardAvoidingView style={{ flex: 1, justifyContent: "center", alignItems: "center" }} behavior="padding">
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -68,8 +72,13 @@ class SignUpScreenThree extends Component {
           handleChange={this.updateValueTwo}
           handleSubmit={this.onSubmit}
         />
+        {displayError ? 
+          <View style={{marginTop: 5}}>
+            <ErrorMessage message="Make sure your passwords match"/>
+          </View> : null
+        }
         <View style={{ marginTop: 20 }}>
-          {bool ? <FormButton text="Get Started!" screen={this.props.screenProps.logIn}/> :
+          {bool ? <FormButton text="Get Started!" onPress={this.onSubmit} /> :
           <View style={{height: 60}} />}
         </View>
       </KeyboardAvoidingView>

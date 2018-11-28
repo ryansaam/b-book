@@ -12,6 +12,7 @@ const InputField = props => {
         value={props.value}
         textContentType={props.textContentType}
         autoCapitalize={props.autoCapitalize}
+        autoCorrect={props.autoCorrect}
         secureTextEntry={props.secureTextEntry}
         keyboardType={props.keyboardType}
         returnKeyType={props.returnKeyType}

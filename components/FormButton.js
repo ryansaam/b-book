@@ -3,7 +3,7 @@ import { TouchableHighlight, Text, StyleSheet } from "react-native"
 
 const FormButton = props => {
   return (
-    <TouchableHighlight style={styles.button} onPress={props.screen}>
+    <TouchableHighlight style={styles.button} onPress={props.onPress}>
       <Text style={styles.buttonText}>
         {props.text}
       </Text>

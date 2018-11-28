@@ -1,18 +1,12 @@
-import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React, { Component } from 'react'
+import { View, Text, StyleSheet, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native'
 
 import { connect } from 'react-redux'
-import { inputUsername } from '../redux/actions.js'
 
 import InputField from "./InputField.js"
 import FormButton from "./FormButton.js"
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center"
-  },
   header: {
     marginBottom: 40,
     fontSize: 60,
@@ -20,38 +14,69 @@ const styles = StyleSheet.create({
   }
 })
 
-const mapDispatchToProps = dispatch => {
-  return { inputUsername: text => dispatch(inputUsername(text)) }
-}
+class ConnectDefaultScreen extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      bool: false,
+      valueOne: "",
+      valueTwo: ""
+    }
+    this.updateValueOne = this.updateValueOne.bind(this)
+    this.updateValueTwo = this.updateValueTwo.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+  }
 
-const ConnectDefaultScreen = props => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.header}>BBook</Text>
-      <InputField
-        textContentType="username"
-        autoCapitalize="none"
-        placeholder="Username"
-        handleChange={props.inputUsername}
-      />
-      <InputField
-        textContentType="password"
-        autoCapitalize="none"
-        secureTextEntry={true}
-        placeholder="Password"
-        handleChange={props.inputUsername}
-      />
-      <View style={{ marginBottom: 20, marginTop: 20 }}>
-        <FormButton
-          text="Log In"
-          screen={props.screenProps.logIn}
+  updateValueOne(text) {
+    console.log(text)
+    this.setState({valueOne: text})
+  }
+  updateValueTwo(text) {
+    console.log(text)
+    this.setState({valueTwo: text})
+  }
+
+  onSubmit() {
+    const { valueOne, valueTwo } = this.state
+    if (valueOne.length > 0 & valueTwo.length > 0 ) {
+      this.props.screenProps.logIn()
+    }
+  }
+
+  render() {
+    return (
+      <KeyboardAvoidingView style={{ flex: 1, justifyContent: "center", alignItems: "center" }} behavior="padding">
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={{position: "absolute", width: "100%", height: "100%"}} />
+        </TouchableWithoutFeedback>
+        <Text style={styles.header}>BBook</Text>
+        <InputField
+          textContentType="emailAddress"
+          autoCapitalize="none"
+          placeholder="Email"
+          handleChange={this.updateValueOne}
+          handleSubmit={this.onSubmit}
         />
-      </View>
-      <FormButton text="Sign Up" screen={() => props.navigation.navigate('SignUpOne')} />
-    </View>
-  )
+        <InputField
+          textContentType="password"
+          autoCapitalize="none"
+          secureTextEntry={true}
+          placeholder="Password"
+          handleChange={this.updateValueTwo}
+          handleSubmit={this.onSubmit}
+        />
+        <View style={{ marginBottom: 20, marginTop: 20 }}>
+          <FormButton
+            text="Log In"
+            onPress={this.onSubmit}
+          />
+        </View>
+        <FormButton text="Sign Up" onPress={() => props.navigation.navigate('SignUpOne')} />
+      </KeyboardAvoidingView>
+    )
+  }
 }
 
-const DefaultScreen = connect(null, mapDispatchToProps) (ConnectDefaultScreen)
+const DefaultScreen = ConnectDefaultScreen //connect(null, mapDispatchToProps) (ConnectDefaultScreen)
 
 export default DefaultScreen

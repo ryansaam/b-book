@@ -67,7 +67,7 @@ class SignUpScreenOne extends Component {
           handleSubmit={this.onSubmit}
         />
         <View style={{ marginTop: 20 }}>
-          {bool ? <FormButton text="Next" screen={() => this.props.navigation.navigate('SignUpTwo')}/> :
+          {bool ? <FormButton text="Next" onPress={() => this.props.navigation.navigate('SignUpTwo')}/> :
           <View style={{height: 60}} />}
         </View>
       </KeyboardAvoidingView>
