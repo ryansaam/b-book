@@ -71,6 +71,7 @@ class ConnectDefaultScreen extends Component {
             onPress={this.onSubmit}
           />
         </View>
+        <Text>Hello world!</Text>
         <FormButton text="Sign Up" onPress={() => props.navigation.navigate('SignUpOne')} />
       </KeyboardAvoidingView>
     )
