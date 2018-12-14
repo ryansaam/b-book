@@ -6,7 +6,7 @@ import InputField from "./InputField.js"
 import FormButton from "./FormButton.js"
 import ErrorMessage from "./ErrorMessage.js"
 
-import {SET_EMAIL_ADDR, setName} from "../redux/actions.js"
+import {SET_EMAIL_ADDR, setName } from "../redux/actions.js"
 
 const mapStateToProps = state => {
   return {

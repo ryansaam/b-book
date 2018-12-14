@@ -1,4 +1,4 @@
-import { SET_FIRST_NAME, SET_LAST_NAME, SET_EMAIL_ADDR } from './actions.js'
+import { SET_FIRST_NAME, SET_LAST_NAME, SET_EMAIL_ADDR, SET_PASSWORD } from './actions.js'
 
 const initialState = {
   firstName: "",
@@ -15,6 +15,8 @@ const rootReducer = (state = initialState, action) => {
       return Object.assign({}, state, { lastName: action.text })
     case SET_EMAIL_ADDR:
       return Object.assign({}, state, { email: action.text })
+    case SET_PASSWORD:
+      return Object.assign({}, state, { password: action.text })  
     default:  
       return state
   }

@@ -1,17 +1,33 @@
 import React, { Component } from "react"
 import { View, Text, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from "react-native"
+import { connect } from 'react-redux'
 
 import InputField from "./InputField.js"
 import FormButton from "./FormButton.js"
 import ErrorMessage from "./ErrorMessage.js"
 
-class SignUpScreenThree extends Component {
+import { SET_PASSWORD, setName } from "../redux/actions.js"
+
+const mapStateToProps = state => {
+  return {
+    password: state.password
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setName: (type, text) => {
+      dispatch(setName(type, text))
+    }
+  }
+}
+
+class ConnectSignUpScreenThree extends Component {
   constructor(props) {
     super(props)
     this.state = {
       bool: false,
       displayError: false,
-      valueOne: "",
       valueTwo: ""
     }
     this.updateValueOne = this.updateValueOne.bind(this)
@@ -20,19 +36,19 @@ class SignUpScreenThree extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { valueOne, valueTwo } = this.state
-    if (valueOne.length !== prevState.valueOne.length || valueTwo.length !== prevState.valueTwo.length) {
-      if (valueOne.length === 0 || valueTwo.length === 0) {
+    const { valueTwo } = this.state
+    const { password } = this.props
+    if (password.length !== prevProps.password.length || valueTwo.length !== prevState.valueTwo.length) {
+      if (password.length === 0 || valueTwo.length === 0) {
         this.setState({ bool: false, displayError: false })
-      } else if (valueOne.length > 0 & valueTwo.length > 0) {
+      } else if (password.length > 0 & valueTwo.length > 0) {
         this.setState({ bool: true })
       }
     }
   }
 
   updateValueOne(text) {
-    console.log(text)
-    this.setState({valueOne: text})
+    this.props.setName(SET_PASSWORD, text)
   }
   updateValueTwo(text) {
     console.log(text)
@@ -40,10 +56,11 @@ class SignUpScreenThree extends Component {
   }
 
   onSubmit() {
-    const { valueOne, valueTwo } = this.state
-    if (this.state.valueOne !== this.state.valueTwo) {
+    const { valueTwo } = this.state
+    const { password } = this.props
+    if (password !== valueTwo) {
       this.setState({ displayError: true })
-    } else if (valueOne.length > 0 & valueTwo.length > 0 && valueOne === valueTwo) {
+    } else if (password.length > 0 & valueTwo.length > 0 && password === valueTwo) {
       this.props.screenProps.logIn()
     }
   }
@@ -85,5 +102,7 @@ class SignUpScreenThree extends Component {
     )
   }
 }
+
+const SignUpScreenThree = connect(mapStateToProps, mapDispatchToProps)(ConnectSignUpScreenThree)
 
 export default SignUpScreenThree
