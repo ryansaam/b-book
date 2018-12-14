@@ -6,9 +6,19 @@ import InputField from "./InputField.js"
 import FormButton from "./FormButton.js"
 import ErrorMessage from "./ErrorMessage.js"
 
+import {SET_EMAIL_ADDR, setName} from "../redux/actions.js"
+
 const mapStateToProps = state => {
   return {
-    firstName: state.firstName
+    email: state.email
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setName: (type, text) => {
+      dispatch(setName(type, text))
+    }
   }
 }
 
@@ -17,34 +27,32 @@ class ConnectSignUpScreenTwo extends Component {
     super(props)
     this.state = {
       bool: false,
-      displayError: false,
-      valueOne: ""
+      displayError: false
     }
     this.updateValueOne = this.updateValueOne.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { valueOne } = this.state
-    if (valueOne.length !== prevState.valueOne.length) {
-      if (valueOne.length === 0) {
+    const { email } = this.props
+    if (email.length !== prevProps.email.length) {
+      if (email.length === 0) {
         this.setState({ bool: false, displayError: false })
-      } else if (valueOne.length > 0) {
+      } else if (email.length > 0) {
         this.setState({ bool: true })
       }
     }
   }
 
   updateValueOne(text) {
-    console.log(text)
-    this.setState({valueOne: text})
+    this.props.setName(SET_EMAIL_ADDR, text)
   }
 
   onSubmit() {
-    const { valueOne } = this.state
+    const { email } = this.props
     const validateEmail = new RegExp("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+[.][a-zA-Z]{2,}$")
-    if (validateEmail.test(valueOne)) {
-      if (valueOne.length > 0) {
+    if (validateEmail.test(email)) {
+      if (email.length > 0) {
         this.props.navigation.navigate('SignUpThree')
         this.setState({ displayError: false })
       }
@@ -63,7 +71,6 @@ class ConnectSignUpScreenTwo extends Component {
         <Text style={{ marginBottom: 20, fontSize: 40, fontWeight: "600", textAlign: "center" }}>Provide an email address</Text>
         <InputField
           placeholder="email"
-          value={this.props.firstName}
           textContentType="emailAddress"
           keyboardType="email-address"
           autoCapitalize="none"
@@ -86,6 +93,6 @@ class ConnectSignUpScreenTwo extends Component {
   }
 }
 
-const SignUpScreenTwo = connect(mapStateToProps)(ConnectSignUpScreenTwo)
+const SignUpScreenTwo = connect(mapStateToProps, mapDispatchToProps)(ConnectSignUpScreenTwo)
 
 export default SignUpScreenTwo
