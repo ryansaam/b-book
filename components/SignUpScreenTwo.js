@@ -1,11 +1,18 @@
 import React, { Component } from "react"
 import { View, Text, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from "react-native"
+import { connect } from 'react-redux'
 
 import InputField from "./InputField.js"
 import FormButton from "./FormButton.js"
 import ErrorMessage from "./ErrorMessage.js"
 
-class SignUpScreenTwo extends Component {
+const mapStateToProps = state => {
+  return {
+    firstName: state.firstName
+  }
+}
+
+class ConnectSignUpScreenTwo extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -56,6 +63,7 @@ class SignUpScreenTwo extends Component {
         <Text style={{ marginBottom: 20, fontSize: 40, fontWeight: "600", textAlign: "center" }}>Provide an email address</Text>
         <InputField
           placeholder="email"
+          value={this.props.firstName}
           textContentType="emailAddress"
           keyboardType="email-address"
           autoCapitalize="none"
@@ -77,5 +85,7 @@ class SignUpScreenTwo extends Component {
     )
   }
 }
+
+const SignUpScreenTwo = connect(mapStateToProps)(ConnectSignUpScreenTwo)
 
 export default SignUpScreenTwo

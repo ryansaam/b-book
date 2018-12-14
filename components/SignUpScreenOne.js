@@ -1,45 +1,63 @@
 import React, { Component } from "react"
 import { View, Text, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from "react-native"
+//import { dispatch } from "redux"
+import { connect } from "react-redux"
 
 import InputField from "./InputField.js"
 import FormButton from "./FormButton.js"
 
-class SignUpScreenOne extends Component {
+import { setName, SET_FIRST_NAME, SET_LAST_NAME } from "../redux/actions.js"
+
+const mapStateToProps = state => {
+  return {
+    firstName: state.firstName,
+    lastName: state.lastName
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setName: (type, text) => {
+      dispatch(setName(type, text))
+    }
+  }
+}
+
+class ConnectSignUpScreenOne extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      bool: false,
-      valueOne: "",
-      valueTwo: ""
+      bool: false
     }
     this.updateValueOne = this.updateValueOne.bind(this)
     this.updateValueTwo = this.updateValueTwo.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { valueOne, valueTwo } = this.state
-    if (valueOne.length !== prevState.valueOne.length || valueTwo.length !== prevState.valueTwo.length) {
-      if (valueOne.length === 0 || valueTwo.length === 0) {
+  componentDidUpdate(prevProps) {
+    const { firstName, lastName } = this.props
+    if (firstName !== prevProps.firstName) console.log(firstName)
+    if (lastName !== prevProps.lastName) console.log(lastName)
+    if (firstName.length !== prevProps.firstName.length || lastName.length !== prevProps.lastName.length) {
+      if (firstName.length === 0 || lastName.length === 0) {
         this.setState({ bool: false })
-      } else if (valueOne.length > 0 & valueTwo.length > 0 ) {
+      } else if (firstName.length > 0 & lastName.length > 0 ) {
         this.setState({ bool: true })
       }
     }
   }
 
   updateValueOne(text) {
-    console.log(text)
-    this.setState({valueOne: text})
+    this.props.setName(SET_FIRST_NAME, text)
   }
   updateValueTwo(text) {
-    console.log(text)
-    this.setState({valueTwo: text})
+    this.props.setName(SET_LAST_NAME, text)
   }
 
   onSubmit() {
-    const { valueOne, valueTwo } = this.state
-    if (valueOne.length > 0 & valueTwo.length > 0 ) {
+    const { firstName, lastName } = this.props
+    if (firstName.length > 0 & lastName.length > 0 ) {
+      console.log(this.props)
       this.props.navigation.navigate('SignUpTwo')
     }
   }
@@ -67,12 +85,14 @@ class SignUpScreenOne extends Component {
           handleSubmit={this.onSubmit}
         />
         <View style={{ marginTop: 20 }}>
-          {bool ? <FormButton text="Next" onPress={() => this.props.navigation.navigate('SignUpTwo')}/> :
+          {bool ? <FormButton text="Next" onPress={this.onSubmit}/> :
           <View style={{height: 60}} />}
         </View>
       </KeyboardAvoidingView>
     )
   }
 }
+
+const SignUpScreenOne = connect(mapStateToProps, mapDispatchToProps)(ConnectSignUpScreenOne)
 
 export default SignUpScreenOne

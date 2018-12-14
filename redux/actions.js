@@ -1,8 +1,9 @@
-export const USERNAME_INPUT = "USERNAME_INPUT"
+export const SET_FIRST_NAME = "SET_FIRST_NAME"
+export const SET_LAST_NAME = "SET_LAST_NAME"
 
-export const inputUsername = text => {
+export const setName = (type, text) => {
   return {
-    type: USERNAME_INPUT,
+    type: type,
     text: text
   }
 }
